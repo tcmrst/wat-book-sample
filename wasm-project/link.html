@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        const definitionFileName = "link-abs-definition.wasm";
+        const callFileName = "link-abs-call.wasm";
+
+        async function run() {
+            const definitionBuffer = await (await fetch(definitionFileName)).arrayBuffer();
+            const { instance: { exports: definitionExports }} = await WebAssembly.instantiate(definitionBuffer);
+            const importObject = {
+                definition: definitionExports
+            }
+
+            const callBuffer = await (await fetch(callFileName)).arrayBuffer();
+            const { instance: callInstance } = await WebAssembly
+                .instantiate(callBuffer, importObject);
+
+            const result = callInstance.exports.main();
+            document.querySelector("#result").textContent = result;
+        }
+    </script>
+    <body>
+        <button onclick="run()">呼び出す</button>
+        <p>実行結果:<span id="result"></span></p>
+    </body>
+</html>

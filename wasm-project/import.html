@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        function plusOne(i) { return i + 1; }
+
+        const table = new WebAssembly.Table({ initial: 1, element: "anyfunc" });
+
+        const memory = new WebAssembly.Memory({ initial: 1 });
+
+        const global = new WebAssembly.Global({ value: "i32", mutable: true }, 100);
+
+        const fileName = "import.wasm";
+        const importObject = {
+            myModule: {
+                plusOne,
+                table,
+                memory,
+                global
+            }
+        };
+        const functionName = "main";
+
+        async function run() {
+            const response = await fetch(fileName);
+            const buffer = await response.arrayBuffer();
+            const { instance } = await WebAssembly.instantiate(buffer, importObject);
+
+            const result = instance.exports.main();
+            document.querySelector("#result").textContent = result;
+        }
+    </script>
+    <body>
+        <button onclick="run()">呼び出す</button>
+        <p>実行結果:<span id="result"></span></p>
+    </body>
+</html>

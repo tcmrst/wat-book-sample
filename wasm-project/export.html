@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        async function run() {
+            const response = await fetch('export.wasm');
+            const arrayBuffer = await response.arrayBuffer();
+            const { module, instance } = await WebAssembly.instantiate(arrayBuffer);
+
+            debugger; // ソースコードにブレークポイントを設定
+        }
+    </script>
+    <body>
+        <button onclick="run()">呼び出す</button>
+    </body>
+</html>

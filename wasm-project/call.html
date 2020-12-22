@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <script src="node_modules/wabt/index.js"></script>
+    <script>
+        async function run() {
+            let result;
+            let fileName = document.querySelector("#fileName").value;
+            let functionName = document.querySelector("#functionName").value;
+            let args = document.querySelector("#args").value.split(' ').map(Number);
+            let write_debug_names = document.querySelector("#writeDebugNames").checked;
+            try {
+                const wabtModule = await WabtModule();
+                const response = await fetch(fileName, { cache: "no-store" });
+                if (!fileName.length || !response.ok) throw new Error(`${fileName || "ファイル"}が見つかりません`);
+                const { buffer } = wabtModule
+                    .parseWat(fileName, await response.arrayBuffer())
+                    .toBinary({ log: false, write_debug_names });
+                const { instance } = await WebAssembly.instantiate(buffer);
+                if (typeof instance.exports[functionName] !== 'function') {
+                    throw new Error(`関数${functionName}がエクスポートされていません`);
+                }
+                result = instance.exports[functionName].apply(null, args);
+            } catch (e) {
+                result = String(e);
+            }
+            document.querySelector("#result").textContent = result;
+        }
+    </script>
+    <body>
+        <input placeholder="ファイル名" id="fileName"><br/>
+        <input placeholder="関数名" id="functionName"><br/>
+        <input placeholder="引数" id="args"><br/>
+        <label><input type="checkbox" id="writeDebugNames" checked>名前を出力</label><br/>
+        <button onclick="run()">呼び出す</button>
+        <p>実行結果:<span id="result"></span></p>
+    </body>
+</html>

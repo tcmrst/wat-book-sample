@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        const memory = new WebAssembly.Memory({ initial: 1 });
+
+        const fileName = "string.wasm";
+        const importObject = {
+            myModule: {
+                memory
+            }
+        };
+
+        async function run() {
+            const input = "hello world";
+            const response = await fetch(fileName);
+            const buffer = await response.arrayBuffer();
+            const { instance } = await WebAssembly.instantiate(buffer, importObject);
+
+            const bytes = new TextEncoder().encode(input); // 文字列をUint8Arrayに変換
+            const memoryBuffer = new Uint8Array(memory.buffer); // memory.bufferをUint8Arrayとして取得
+            memoryBuffer.subarray(0, bytes.length).set(bytes); // memory.bufferに文字列をコピーする
+
+            instance.exports.toUpper(0, bytes.length);
+
+            const slice = memoryBuffer.slice(0, bytes.length); // memoryBufferから、変換したUint8Arrayを取得
+            const result = (new TextDecoder("utf-8")).decode(slice); // Uint8ArrayをUTF-8に変換
+
+            document.querySelector("#result").textContent = result;
+        }
+    </script>
+    <body>
+        <button onclick="run()">呼び出す</button>
+        <p>実行結果:<span id="result"></span></p>
+    </body>
+</html>

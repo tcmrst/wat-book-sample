@@ -1,0 +1,11 @@
+
+simple.wasm:	file format wasm 0x1
+
+Code Disassembly:
+
+000016 func[0]:
+ 000017: 41 01                      | i32.const 1
+ 000019: 41 02                      | i32.const 2
+ 00001b: 6a                         | i32.add
+ 00001c: 1a                         | drop
+ 00001d: 0b                         | end

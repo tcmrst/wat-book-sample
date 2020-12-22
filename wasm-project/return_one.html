@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        async function run() {
+            const response = await fetch('return_one.wasm');
+            const arrayBuffer = await response.arrayBuffer();
+            const module = await WebAssembly.compile(arrayBuffer);
+            const instance = await WebAssembly.instantiate(module);
+            const result = instance.exports.return_one();
+            document.querySelector("#result").textContent = result;
+        }
+    </script>
+    <body>
+        <button onclick="run()">呼び出す</button>
+        <p>実行結果:<span id="result"></span></p>
+    </body>
+</html>
