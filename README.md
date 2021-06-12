@@ -1,6 +1,6 @@
 # wat-book-sample
 電子書籍「WebAssemblyテキストフォーマットで読み解くコンピューティングの未来」のサンプルコードです。
 
-詳細はこちらをご覧ください。
+対応バージョンは技書博5版です。
 
-https://techbookfest.org/product/4765275696136192
+技術書典10版は[こちら](https://github.com/tcmrst/wat-book-sample/releases/tag/tbf10)
