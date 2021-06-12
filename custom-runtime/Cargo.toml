@@ -8,4 +8,5 @@ edition = "2018"
 
 [dependencies]
 actix-web = "3.3.2"
-wasmtime = "0.21.0"
+anyhow = "1.0.40"
+wasmtime = "0.27.0"

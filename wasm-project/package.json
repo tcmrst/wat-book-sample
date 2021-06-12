@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "serve": "^11.3.2",
-    "wabt": "^1.0.20"
+    "wabt": "^1.0.23"
   }
 }

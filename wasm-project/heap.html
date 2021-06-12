@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        async function run() {
+            const { instance } = await WebAssembly
+                .instantiateStreaming(fetch('heap.wasm'));
+
+            const element_div = document
+                .createElement("div")
+                .appendChild(document.createTextNode("hello"));
+
+            const index_div = instance.exports.addHeapObject(element_div);
+            const index_body = instance.exports.addHeapObject(document.body);
+
+            const div = instance.exports.getObject(index_div);
+            const body = instance.exports.getObject(index_body);
+            body.appendChild(div);
+        }
+    </script>
+    <body>
+        <button onclick="run()">呼び出す</button>
+    </body>
+</html>

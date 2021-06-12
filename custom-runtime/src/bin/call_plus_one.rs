@@ -1,20 +1,21 @@
-use wasmtime::{Engine, Module, Store, Instance};
+use wasmtime::{Engine, Instance, Module, Store};
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() != 2 {
         println!("usage: {} wasmfile", args[0]);
-        return;
+        return Ok(());
     }
 
     let engine = Engine::default();
-    let module = Module::from_file(&engine, &args[1]).unwrap();
+    let module = Module::from_file(&engine, &args[1])?;
     let store = Store::new(&engine);
-    let instance = Instance::new(&store, &module, &[]).unwrap();
+    let instance = Instance::new(&store, &module, &[])?;
 
-    let func = instance.get_func("plus_one").unwrap();
-    let result = func.get1::<i32, i32>().unwrap()(10);
+    let func = instance.get_typed_func::<i32, i32>("plus_one")?;
+    let result = func.call(10);
 
-    println!("result: {}", result.unwrap());
+    println!("result: {:?}", result);
+    Ok(())
 }

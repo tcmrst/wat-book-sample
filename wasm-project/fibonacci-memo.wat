@@ -57,13 +57,7 @@
     )
 
     (func (export "main") (result i32)
-        i32.const 4
+        i32.const 40
         call $fibonacci_memo
-    )
-
-    (func (export "out_of_bounds")
-        i32.const 16384 ;; 65536 / 4
-        i32.const 1
-        call $write_memo
     )
 )
