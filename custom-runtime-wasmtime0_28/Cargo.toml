@@ -1,0 +1,12 @@
+[package]
+name = "custom-runtime-wasmtime0_28"
+version = "0.1.0"
+authors = ["tcmrst <tcmrst@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "3.3.2"
+anyhow = "1.0.40"
+wasmtime = "0.28.0"
